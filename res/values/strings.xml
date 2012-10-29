@@ -1,0 +1,22 @@
+<resources>
+
+    <string name="app_name">Blog</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">New Post</string>
+    <string name="title_activity_login">Login</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="signup">Signup</string>
+    <string name="loginsuccessful">Login Successful</string>
+    <string name="loginunsucessful">Login Failed.Enter proper credentials and try again.</string>
+    <string name="title_activity_blog">BlogActivity</string>
+    <string name="blogcontent"></string>
+    <string name="newpost">New Post</string>
+    <string name="logout">Logout</string>
+    <string name="title_activity_newpost">Newpost</string>
+    <string name="cancel">Cancel</string>
+    <string name="title">Enter Blog title here</string>
+    <string name="content">Enter Blog content Here</string>
+
+</resources>
