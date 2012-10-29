@@ -18,5 +18,12 @@
     <string name="cancel">Cancel</string>
     <string name="title">Enter Blog title here</string>
     <string name="content">Enter Blog content Here</string>
+    <string name="posterror">Post Error.Try Again.</string>
+    <string name="title_activity_signup">Signup</string>
+    <string name="confirm">Confirm Password</string>
+    <string name="email">Email(optional)</string>
+    <string name="signuperror">Signup Error.Choose a different username. </string>
+    <string name="signupfielderror">Please enter values in all fields.</string>
+    <string name="signuppasserror">Enter valid password in both fields.</string>
 
 </resources>

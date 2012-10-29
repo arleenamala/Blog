@@ -128,12 +128,6 @@ public class BlogActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
             if (result.length() > 0) {
-
-                // Toast loginSuccessToast = Toast.makeText(Login.this,
-                // R.string.loginsuccessful, Toast.LENGTH_LONG);
-                // loginSuccessToast.show();
-                // startActivity(new Intent(Login.this,
-                // BlogActivity.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                 blogText.setText(result);
             } else {
                 Toast loginFailureToast = Toast.makeText(BlogActivity.this, R.string.loginunsucessful,

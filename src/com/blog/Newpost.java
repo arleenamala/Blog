@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -73,6 +74,19 @@ public class Newpost extends Activity {
         getMenuInflater().inflate(R.menu.activity_newpost, menu);
         return true;
     }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        
+        switch(item.getItemId()){
+        case R.id.menu_settings:
+            System.out.println("Newpost Selected");
+            startActivity(new Intent(Newpost.this, BlogActivity.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            break;
+        }
+        return true;
+    }
+
     
     public static String newpost(String url1) {
         String success = "";
@@ -145,12 +159,14 @@ private class NewpostTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         if (result.length() == 3){
+            Newpost.titleText.setText("");
+            Newpost.contentText.setText("");
             startActivity(new Intent(Newpost.this, BlogActivity.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
         }
         else
         {
-            Toast loginFailureToast = Toast.makeText(Newpost.this, R.string.loginunsucessful, Toast.LENGTH_LONG);
-            loginFailureToast.show();
+            Toast newpostFailureToast = Toast.makeText(Newpost.this, R.string.posterror, Toast.LENGTH_LONG);
+            newpostFailureToast.show();
            
         }
     }

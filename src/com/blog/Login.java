@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Login extends Activity {
@@ -27,22 +28,34 @@ public class Login extends Activity {
     public static EditText passwordText;
     public static String hashedname;
     public static String author;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Button loginBtn = (Button) findViewById(R.id.button1);
-        
+
         loginBtn.setOnClickListener(new OnClickListener() {
-        
+
             @Override
             public void onClick(View v) {
                 usernameText = (EditText) findViewById(R.id.editText1);
-                passwordText = (EditText) findViewById(R.id.editText2); 
+                passwordText = (EditText) findViewById(R.id.editText2);
                 LoginTask task = new LoginTask();
                 task.execute(new String[] { "http://192.168.1.8:3000/user_details/login.json" });
-                
+
+            }
+        });
+
+        TextView signupBtn = (TextView) findViewById(R.id.textView3);
+
+        signupBtn.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Login.this, Signup.class)
+                .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+
             }
         });
     }
@@ -52,7 +65,7 @@ public class Login extends Activity {
         getMenuInflater().inflate(R.menu.activity_login, menu);
         return true;
     }
-    
+
     public static String login(String url1) {
         try {
             String username = usernameText.getText().toString();
@@ -63,9 +76,8 @@ public class Login extends Activity {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
-            OutputStreamWriter writer = new OutputStreamWriter(
-                    conn.getOutputStream());
-            
+            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+
             // write parameters
             StringBuilder sb = new StringBuilder();
             sb.append("&name=").append(username);
@@ -75,8 +87,7 @@ public class Login extends Activity {
 
             // Get the response
             StringBuffer answer = new StringBuffer();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    conn.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
                 answer.append(line);
@@ -84,13 +95,12 @@ public class Login extends Activity {
             writer.close();
             reader.close();
 
-            JSONObject object = (JSONObject) new JSONTokener(answer.toString())
-                    .nextValue();
+            JSONObject object = (JSONObject) new JSONTokener(answer.toString()).nextValue();
             System.out.println(object.toString());
             hashedname = object.getString("hashedname");
-            System.out.println("The received hash is "+ hashedname);
-           conn.disconnect();
-           
+            System.out.println("The received hash is " + hashedname);
+            conn.disconnect();
+
         } catch (MalformedURLException ex) {
             System.out.println("url error");
             ex.printStackTrace();
@@ -100,40 +110,37 @@ public class Login extends Activity {
         } catch (JSONException e) {
             System.out.println("json error");
             e.printStackTrace();
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return hashedname;
     }
 
-
-private class LoginTask extends AsyncTask<String, Void, String> {
-    @Override
-    protected String doInBackground(String... urls) {
-      String response = "";
-      for (String url : urls) {
-          response = Login.login( url );
-      }
-      return response;
-    }
-
-    @Override
-    protected void onPostExecute(String result) {
-        if (hashedname.length() == 64){
-            
-            Toast loginSuccessToast = Toast.makeText(Login.this, R.string.loginsuccessful, Toast.LENGTH_LONG);
-            loginSuccessToast.show();
-            usernameText.setText("");
-            passwordText.setText("");
-            startActivity(new Intent(Login.this, BlogActivity.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+    private class LoginTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            String response = "";
+            for (String url : urls) {
+                response = Login.login(url);
+            }
+            return response;
         }
-        else
-        {
-            Toast loginFailureToast = Toast.makeText(Login.this, R.string.loginunsucessful, Toast.LENGTH_LONG);
-            loginFailureToast.show();
-           
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (hashedname.length() == 64) {
+
+                Toast loginSuccessToast = Toast.makeText(Login.this, R.string.loginsuccessful, Toast.LENGTH_LONG);
+                loginSuccessToast.show();
+                usernameText.setText("");
+                passwordText.setText("");
+                startActivity(new Intent(Login.this, BlogActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            } else {
+                Toast loginFailureToast = Toast.makeText(Login.this, R.string.loginunsucessful, Toast.LENGTH_LONG);
+                loginFailureToast.show();
+
+            }
         }
     }
-  }
 }
