@@ -39,6 +39,14 @@ public class BlogActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_blog, menu);
         return true;
     }
+    
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        GetBlogsTask task = new GetBlogsTask();
+        task.execute(new String[] { "http://192.168.1.8:3000/blogs/jsonview.json" });
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
