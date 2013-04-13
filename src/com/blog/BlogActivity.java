@@ -31,7 +31,7 @@ public class BlogActivity extends Activity {
         setContentView(R.layout.activity_blog);
         blogText = (TextView) findViewById(R.id.textView1);
         GetBlogsTask task = new GetBlogsTask();
-        task.execute(new String[] { "http://192.168.1.8:3000/blogs/jsonview.json" });
+        task.execute(new String[] { Login.pythonurls[2] });
     }
 
     @Override
@@ -45,7 +45,7 @@ public class BlogActivity extends Activity {
     {
         super.onRestart();
         GetBlogsTask task = new GetBlogsTask();
-        task.execute(new String[] { "http://192.168.1.8:3000/blogs/jsonview.json" });
+        task.execute(new String[] { Login.pythonurls[2] });
     }
 
     @Override
@@ -71,13 +71,12 @@ public class BlogActivity extends Activity {
             // Open connection for request
             URL url = new URL(url1);
             System.out.println("the url is set to " + url1);
-            System.out.println("going to set it to get");
+            System.out.println("get");
             HttpURLConnection blogsGetConn = (HttpURLConnection) url.openConnection();
             blogsGetConn.setRequestMethod("GET");
             blogsGetConn.connect();
 
-            System.out.println(" the request method set is " + blogsGetConn.getRequestMethod());
-
+            System.out.println("Request Sent time");
             // Get the response
             StringBuffer answer = new StringBuffer();
             BufferedReader reader = new BufferedReader(new InputStreamReader(blogsGetConn.getInputStream()));
@@ -87,9 +86,9 @@ public class BlogActivity extends Activity {
             }
             // writer.close();
             reader.close();
-
+            System.out.println("Response received time");
             JSONObject object = (JSONObject) new JSONTokener(answer.toString()).nextValue();
-            System.out.println(object.toString());
+            //System.out.println(object.toString());
             JSONArray blogList = object.getJSONArray("blogs");
             for (int i = 0; i < blogList.length(); i++) {
                 JSONObject j = (JSONObject) blogList.get(i);
@@ -99,7 +98,7 @@ public class BlogActivity extends Activity {
                 blogtext += j.getString("content") + "\n\n\n";
 
             }
-            System.out.println("the blog text is " + blogtext);
+            System.out.println("Response time after processing");
         } catch (MalformedURLException ex) {
             System.out.println("url error");
             ex.printStackTrace();

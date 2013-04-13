@@ -46,7 +46,7 @@ public class Signup extends Activity {
                 confirmpassText = (EditText) findViewById(R.id.editText3);
                 emailText = (EditText) findViewById(R.id.editText4);
                 SignupTask task = new SignupTask();
-                task.execute(new String[] { "http://192.168.1.8:3000/user_details/signup.json" });
+                task.execute(new String[] { Login.pythonurls[1] });
 
             }
         });
@@ -142,7 +142,7 @@ public class Signup extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            if (result.length() == 64) {
+            if (result.length() >= 64) {
                 startActivity(new Intent(Signup.this, Login.class).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
             } else if (result.equalsIgnoreCase("fieldempty")) {
                     Toast signupFailureToast = Toast

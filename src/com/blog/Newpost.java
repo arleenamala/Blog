@@ -63,7 +63,7 @@ public class Newpost extends Activity {
                 titleText = (EditText) findViewById(R.id.editText1);
                 contentText = (EditText) findViewById(R.id.editText2); 
                 NewpostTask task = new NewpostTask();
-                task.execute(new String[] { "http://192.168.1.8:3000/blogs/newpost.json" });
+                task.execute(new String[] { Login.pythonurls[3] });
                 
             }
         });
@@ -107,6 +107,7 @@ public class Newpost extends Activity {
             sb.append("&name=").append(name);
             sb.append("&title=").append(title);
             sb.append("&content=").append(content);
+            sb.append("&created=");
             writer.write(sb.toString());
             writer.flush();
 

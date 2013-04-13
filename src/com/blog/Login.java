@@ -23,11 +23,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Login extends Activity {
-
+	
     public static EditText usernameText;
     public static EditText passwordText;
     public static String hashedname;
     public static String author;
+    public static String[] rubyurls =  new String[] {"http://10.0.0.3:3000/user_details/login.json",
+    	"http://10.0.0.3:3000/user_details/signup.json",
+    	"http://10.0.0.3:3000/blogs/jsonview.json",
+    	"http://10.0.0.3:3000/blogs/newpost.json"};
+    public static String[] pythonurls = new String[] {"http://10.0.0.3:5000/login/",
+    	"http://10.0.0.3:5000/signup/",
+    	"http://10.0.0.3:5000/blog/",
+    	"http://10.0.0.3:5000/newpost/"} ;
+    public static String[] netsqlurls = new String[] {"http://10.0.0.2:49471/api/login/.json",
+    	"http://10.0.0.2:49471/api/userdetails/.json",
+    	"http://10.0.0.2:49471/api/blog/.json",
+    	"http://10.0.0.2:49471/api/blog/.json"};
+    public static String[] netmongourls = new String[] {"http://10.0.0.2:55167/api/login/.json",
+    	"http://10.0.0.2:55167/api/userdetails/.json",
+    	"http://10.0.0.2:55167/api/blog/.json",
+    	"http://10.0.0.2:55167/api/blog/.json"};
+    public static String[] phpsqlurls = new String[] {"http://10.0.0.3/phpblogsql/logincontroller.php",
+    	"http://10.0.0.3/phphblogsql/signupcontroller.php",
+    	"http://10.0.0.3/phpblogsql/blogcontroller.php",
+    	"http://10.0.0.3/phpblogsql/newpostcontroller.php"};
+    public static String[] phpmongourls = new String[] {"http://10.0.0.3/phpblogmongo/logincontroller.php",
+    	"http://10.0.0.3/phphblogmongo/signupcontroller.php",
+    	"http://10.0.0.3/phpblogmongo/blogcontroller.php",
+    	"http://10.0.0.3/phpblogmongo/newpostcontroller.php"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +66,7 @@ public class Login extends Activity {
                 usernameText = (EditText) findViewById(R.id.editText1);
                 passwordText = (EditText) findViewById(R.id.editText2);
                 LoginTask task = new LoginTask();
-                task.execute(new String[] { "http://192.168.1.8:3000/user_details/login.json" });
+                task.execute(new String[] { pythonurls[0] });
 
             }
         });
@@ -70,12 +94,15 @@ public class Login extends Activity {
         try {
             String username = usernameText.getText().toString();
             String password = passwordText.getText().toString();
+            String line;
             author = usernameText.getText().toString();
             // Open connection for request
             URL url = new URL(url1);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
+          
+           
             OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
 
             // write parameters
@@ -88,17 +115,18 @@ public class Login extends Activity {
             // Get the response
             StringBuffer answer = new StringBuffer();
             BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line;
+           
             while ((line = reader.readLine()) != null) {
                 answer.append(line);
             }
             writer.close();
-            reader.close();
+            
 
             JSONObject object = (JSONObject) new JSONTokener(answer.toString()).nextValue();
-            System.out.println(object.toString());
+            //System.out.println(object.toString());
             hashedname = object.getString("hashedname");
-            System.out.println("The received hash is " + hashedname);
+            //System.out.println("The received hash is " + hashedname);
+            reader.close();
             conn.disconnect();
 
         } catch (MalformedURLException ex) {
@@ -113,6 +141,7 @@ public class Login extends Activity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        
         return hashedname;
     }
 
@@ -128,7 +157,7 @@ public class Login extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            if (hashedname.length() == 64) {
+            if (hashedname.length() >= 64) {
 
                 Toast loginSuccessToast = Toast.makeText(Login.this, R.string.loginsuccessful, Toast.LENGTH_LONG);
                 loginSuccessToast.show();
